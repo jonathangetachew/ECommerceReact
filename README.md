@@ -1,3 +1,6 @@
+# E-Commerce React
+An E-Commerce application for my first react project.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
