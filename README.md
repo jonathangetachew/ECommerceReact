@@ -1,6 +1,12 @@
 # E-Commerce React
 An E-Commerce application for my first react project.
 
+## Checklist
+* [x] React
+* [ ] Redux
+* [x] Firebase
+* [x] SASS
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
