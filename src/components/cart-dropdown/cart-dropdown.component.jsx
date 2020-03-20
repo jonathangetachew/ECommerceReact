@@ -1,21 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { withRouter } from 'react-router-dom';
 
 import CustomButton from '../custom-button/custom-button.component';
 import CartItem from '../cart-item/cart-item.component';
 import { selectCartItems } from '../../redux/cart/cart.selectors';
+import { toggleCartHidden } from '../../redux/cart/cart.actions';
 
 import './cart-dropdown.styles.scss';
 
-const CartDropdown = ({ cartItems }) => (
+const CartDropdown = ({ cartItems, history, dispatch }) => (
   <div className='cart-dropdown'>
     <div className="cart-items">
       {
-        cartItems.map(cartItem => <CartItem key={cartItem.id} item={cartItem} />)
+        cartItems.length ? (
+          cartItems.map(cartItem => <CartItem key={cartItem.id} item={cartItem} />)
+        ) : (
+          <span className='empty-message'>Your cart is empty</span>
+        )
       }
     </div>
-    <CustomButton>GO TO CHECKOUT</CustomButton>
+    <CustomButton onClick={ () => {
+        history.push('/checkout');
+        dispatch(toggleCartHidden());
+      }}>GO TO CHECKOUT</CustomButton>
   </div>
 );
 
@@ -23,6 +32,8 @@ const mapStateToProps = createStructuredSelector({
   cartItems: selectCartItems
 })
 
-export default connect(
+// If there's no 2nd argument to connect ( mapDispatchToProps ), connect passes a dispatch object to our component as a prop
+// The order in which we next withRouter and connect matters since the argument passed is needed
+export default withRouter(connect(
   mapStateToProps
-)(CartDropdown);
+)(CartDropdown));
