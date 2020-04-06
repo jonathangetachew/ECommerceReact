@@ -1,0 +1,34 @@
+import { takeEvery, call, put } from "redux-saga/effects";
+
+import {
+  firestore,
+  convertCollectionsSnapshotToMap,
+} from "../../firebase/firebase.utils";
+
+import {
+  fetchCollectionsSuccess,
+  fetchCollectionsFailure,
+} from "./shop.actions";
+
+import ShopActionTypes from "./shop.types";
+
+export function* fetchCollectionsAsync() {
+  yield console.log("I am fired");
+  
+  try {
+    const collectionRef = firestore.collection("collections");
+    const snapshot = yield collectionRef.get();
+    const collectionsMap = yield call(convertCollectionsSnapshotToMap, snapshot);
+    // put is the saga effect corresponding to dispatch in redux-thunk
+    yield put(fetchCollectionsSuccess(collectionsMap));
+  } catch (error) {
+    yield put(fetchCollectionsFailure(error.message));
+  }
+}
+
+export function* fetchCollectionsStart() {
+  yield takeEvery(
+    ShopActionTypes.FETCH_COLLECTIONS_START,
+    fetchCollectionsAsync
+  );
+}
