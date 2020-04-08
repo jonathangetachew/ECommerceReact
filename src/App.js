@@ -12,12 +12,6 @@ import CheckoutPage from "./pages/checkout/checkout.components";
 
 import Header from "./components/header/header.component";
 
-import {
-  auth,
-  createUserProfileDocument
-  // addCollectionAndDocuments
-} from "./firebase/firebase.utils";
-import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selectors";
 // import { selectCollectionsForPreview } from "./redux/shop/shop.selector";
 
@@ -26,31 +20,30 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser /*, collectionArray*/ } = this.props;
 
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        ///> Save user info to firebase
-        const userRef = await createUserProfileDocument(userAuth);
+    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    //   if (userAuth) {
+    //     ///> Save user info to firebase
+    //     const userRef = await createUserProfileDocument(userAuth);
 
-        userRef.onSnapshot(snapshot => {
-          ///> Save user info for other compoenents to use
-          setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data()
-          });
-        });
-      }
+    //     userRef.onSnapshot(snapshot => {
+    //       ///> Save user info for other compoenents to use
+    //       setCurrentUser({
+    //         id: snapshot.id,
+    //         ...snapshot.data()
+    //       });
+    //     });
+    //   }
 
-      setCurrentUser(userAuth);
+    //   setCurrentUser(userAuth);
 
-      ///> Destructure the collectionArray because we don't want the id and routeName in the file.
-      ///> We just need the title and items, the res will be handled by firestore
-      // addCollectionAndDocuments(
-      //   "collections",
-      //   collectionArray.map(({ title, items }) => ({ title, items }))
-      // );
-    });
+    //   ///> Destructure the collectionArray because we don't want the id and routeName in the file.
+    //   ///> We just need the title and items, the res will be handled by firestore
+    //   // addCollectionAndDocuments(
+    //   //   "collections",
+    //   //   collectionArray.map(({ title, items }) => ({ title, items }))
+    //   // );
+    // });
   }
 
   componentWillUnmount() {
@@ -83,12 +76,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
   // collectionArray: selectCollectionsForPreview
 });
 
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);
