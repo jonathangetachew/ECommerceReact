@@ -13,6 +13,7 @@ import CheckoutPage from "./pages/checkout/checkout.components";
 import Header from "./components/header/header.component";
 
 import { selectCurrentUser } from "./redux/user/user.selectors";
+import { checkUserSession } from "./redux/user/user.actions";
 // import { selectCollectionsForPreview } from "./redux/shop/shop.selector";
 
 class App extends React.Component {
@@ -20,30 +21,8 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-
-    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-    //   if (userAuth) {
-    //     ///> Save user info to firebase
-    //     const userRef = await createUserProfileDocument(userAuth);
-
-    //     userRef.onSnapshot(snapshot => {
-    //       ///> Save user info for other compoenents to use
-    //       setCurrentUser({
-    //         id: snapshot.id,
-    //         ...snapshot.data()
-    //       });
-    //     });
-    //   }
-
-    //   setCurrentUser(userAuth);
-
-    //   ///> Destructure the collectionArray because we don't want the id and routeName in the file.
-    //   ///> We just need the title and items, the res will be handled by firestore
-    //   // addCollectionAndDocuments(
-    //   //   "collections",
-    //   //   collectionArray.map(({ title, items }) => ({ title, items }))
-    //   // );
-    // });
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount() {
@@ -80,4 +59,8 @@ const mapStateToProps = createStructuredSelector({
   // collectionArray: selectCollectionsForPreview
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => ({
+  checkUserSession: () => dispatch(checkUserSession()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
